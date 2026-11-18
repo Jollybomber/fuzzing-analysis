@@ -32,8 +32,11 @@ mkdir -p src
 # 1. Clone cJSON (v1.7.19)
 git clone --branch v1.7.19 --depth 1 [https://github.com/DaveGamble/cJSON.git](https://github.com/DaveGamble/cJSON.git) src/cjson_src
 
-# 2. Clone json-c (v5.5.0 / tag json-c-0.16)
+# 2. Clone json-c (v0.16 / tag json-c-0.16-20220414)
 git clone --branch json-c-0.16-20220414 --depth 1 [https://github.com/json-c/json-c.git](https://github.com/json-c/json-c.git) src/jsonc_src
+
+# 3. Initialize JSONTestSuite
+git submodule update --init tests/JSONTestSuite
 
 ```
 
@@ -83,6 +86,6 @@ Launch 2-hour fuzzing campaigns using your instrumented binaries and seed corpus
 ## Version & Tooling Reference
 
 * **cJSON Version:** `v1.7.19`
-* **json-c Version:** `v5.5.0` (Tag: `json-c-0.16-20220414`)
+* **json-c Version:** `v0.16` (Tag: `json-c-0.16-20220414`)
 * **Fuzzer:** `AFL++` (via `afl-clang-fast`)
 * **Sanitizers:** AddressSanitizer (ASan), UndefinedBehaviorSanitizer (UBSan)
