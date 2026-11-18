@@ -14,11 +14,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    fseek(f, 0, SEEK_END);
+    if (fseek(f, 0, SEEK_END) != 0) {
+        fclose(f);
+        return 1;
+    }
     long len = ftell(f);
-    fseek(f, 0, SEEK_SET);
-
-    if (len < 0) {
+    if (len < 0 || fseek(f, 0, SEEK_SET) != 0) {
         fclose(f);
         return 1;
     }
@@ -33,20 +34,24 @@ int main(int argc, char *argv[]) {
     data[read_len] = '\0';
     fclose(f);
 
-    /* Parse the JSON input */
-    cJSON *json = cJSON_ParseWithLength(data, read_len);
-    if (!json) {
+    /* Parse and require the entire input (up to trailing whitespace) to be consumed */
+    const char *parse_end = NULL;
+    cJSON *json = cJSON_ParseWithLengthOpts(data, read_len + 1, &parse_end, 1);
+    if (!json || parse_end != data + read_len) {
         const char *error_ptr = cJSON_GetErrorPtr();
         if (error_ptr != NULL) {
             fprintf(stderr, "Parse error before: %s\n", error_ptr);
         } else {
-            fprintf(stderr, "Parse error\n");
+            fprintf(stderr, "Parse error: trailing or incomplete input\n");
+        }
+        if (json) {
+            cJSON_Delete(json);
         }
         free(data);
         return 1;
     }
 
-    /* Print normalized JSON output to stdout */
+    /* Print clean normalized JSON output to stdout */
     char *out = cJSON_PrintUnformatted(json);
     if (out) {
         printf("%s\n", out);
