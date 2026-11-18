@@ -1,5 +1,3 @@
----
-
 ```markdown
 # cJSON vs. json-c: Security & Differential Analysis
 
