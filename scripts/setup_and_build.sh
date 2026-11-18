@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# Resolve paths from the script so reruns also work outside the project root.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_ROOT"
+BUILD_JOBS="${BUILD_JOBS:-$(getconf _NPROCESSORS_ONLN)}"
+
 echo "[+] Setting up cJSON & json-c Fuzzing and Analysis Environment..."
 
 # 1. Create directory structures (ignored by git)
@@ -35,30 +41,44 @@ unset AFL_USE_ASAN
 # 3. Build json-c Variants
 # ==========================================
 echo "[+] Compiling json-c binaries..."
-
 # Variant A: Normal Baseline
-mkdir -p builds/jsonc_normal/build_internal && cd builds/jsonc_normal/build_internal
-cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_BUILD_TYPE=Release ../../../src/jsonc_src
-make -j$(nproc) && cd ../../..
+cmake -S "$PROJECT_ROOT/src/jsonc_src" \
+      -B "$PROJECT_ROOT/builds/jsonc_normal/build_internal" \
+      -DCMAKE_C_COMPILER=gcc -DCMAKE_BUILD_TYPE=Release \
+      -DBUILD_STATIC_LIBS=ON -DDISABLE_WERROR=ON
+cmake --build "$PROJECT_ROOT/builds/jsonc_normal/build_internal" --parallel "$BUILD_JOBS"
+gcc -O3 -I"$PROJECT_ROOT/src/jsonc_src" -I"$PROJECT_ROOT/builds/jsonc_normal/build_internal" \
+    "$PROJECT_ROOT/scripts/jsonc_parse.c" "$PROJECT_ROOT/builds/jsonc_normal/build_internal/libjson-c.a" \
+    -o "$PROJECT_ROOT/builds/jsonc_normal/jsonc_parse"
 
 # Variant B: AFL++ with ASan only
-mkdir -p builds/jsonc_afl_asan/build_internal && cd builds/jsonc_afl_asan/build_internal
 export AFL_USE_ASAN=1
-cmake -DCMAKE_C_COMPILER=afl-clang-fast \
+cmake -S "$PROJECT_ROOT/src/jsonc_src" \
+      -B "$PROJECT_ROOT/builds/jsonc_afl_asan/build_internal" \
+      -DCMAKE_C_COMPILER=afl-clang-fast \
       -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_C_FLAGS="-fsanitize=address -fno-omit-frame-pointer" \
-      ../../../src/jsonc_src
-make -j$(nproc) && cd ../../..
+      -DBUILD_STATIC_LIBS=ON -DDISABLE_WERROR=ON \
+      -DCMAKE_C_FLAGS="-fsanitize=address -fno-omit-frame-pointer"
+cmake --build "$PROJECT_ROOT/builds/jsonc_afl_asan/build_internal" --parallel "$BUILD_JOBS"
+afl-clang-fast -O3 -fsanitize=address -fno-omit-frame-pointer \
+    -I"$PROJECT_ROOT/src/jsonc_src" -I"$PROJECT_ROOT/builds/jsonc_afl_asan/build_internal" \
+    "$PROJECT_ROOT/scripts/jsonc_parse.c" "$PROJECT_ROOT/builds/jsonc_afl_asan/build_internal/libjson-c.a" \
+    -o "$PROJECT_ROOT/builds/jsonc_afl_asan/jsonc_parse"
 unset AFL_USE_ASAN
 
 # Variant C: AFL++ with ASan + UBSan
-mkdir -p builds/jsonc_afl_asan_ubsan/build_internal && cd builds/jsonc_afl_asan_ubsan/build_internal
 export AFL_USE_ASAN=1
-cmake -DCMAKE_C_COMPILER=afl-clang-fast \
+cmake -S "$PROJECT_ROOT/src/jsonc_src" \
+      -B "$PROJECT_ROOT/builds/jsonc_afl_asan_ubsan/build_internal" \
+      -DCMAKE_C_COMPILER=afl-clang-fast \
       -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer" \
-      ../../../src/jsonc_src
-make -j$(nproc) && cd ../../..
+      -DBUILD_STATIC_LIBS=ON -DDISABLE_WERROR=ON \
+      -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+cmake --build "$PROJECT_ROOT/builds/jsonc_afl_asan_ubsan/build_internal" --parallel "$BUILD_JOBS"
+afl-clang-fast -O3 -fsanitize=address,undefined -fno-omit-frame-pointer \
+    -I"$PROJECT_ROOT/src/jsonc_src" -I"$PROJECT_ROOT/builds/jsonc_afl_asan_ubsan/build_internal" \
+    "$PROJECT_ROOT/scripts/jsonc_parse.c" "$PROJECT_ROOT/builds/jsonc_afl_asan_ubsan/build_internal/libjson-c.a" \
+    -o "$PROJECT_ROOT/builds/jsonc_afl_asan_ubsan/jsonc_parse"
 unset AFL_USE_ASAN
 
 echo "[+] All three variants built successfully for both libraries!"
