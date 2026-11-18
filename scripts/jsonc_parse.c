@@ -62,7 +62,8 @@ int main(int argc, char *argv[]) {
         jerr = json_tokener_get_error(tok);
     }
 
-    if (!obj || jerr != json_tokener_success || consumed != read_len) {
+    /* Note: json-c represents a valid JSON `null` value as obj == NULL with jerr == json_tokener_success */
+    if (jerr != json_tokener_success || consumed != read_len) {
         fprintf(stderr, "Parse error: %s\n", json_tokener_error_desc(jerr));
         if (obj) {
             json_object_put(obj);
@@ -73,14 +74,16 @@ int main(int argc, char *argv[]) {
     }
 
     /* Print clean normalized JSON output to stdout */
-    const char *out = json_object_to_json_string_ext(
-        obj, JSON_C_TO_STRING_PLAIN | JSON_C_TO_STRING_NOSLASHESCAPE
-    );
+    const char *out = obj
+        ? json_object_to_json_string_ext(obj, JSON_C_TO_STRING_PLAIN | JSON_C_TO_STRING_NOSLASHESCAPE)
+        : "null";
     if (out) {
         printf("%s\n", out);
     }
 
-    json_object_put(obj);
+    if (obj) {
+        json_object_put(obj);
+    }
     json_tokener_free(tok);
     free(data);
     return 0;
