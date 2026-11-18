@@ -7,7 +7,7 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 TARGET=$1
 VARIANT=${2:-asan} # Default to asan if not specified (options: asan, asan_ubsan)
-DURATION=2    # 2 hours in seconds (AFL++ -V flag)
+DURATION=7200    # 2 hours in seconds (AFL++ -V flag)
 
 if [ -z "$TARGET" ]; then
     echo "[-] Error: No target specified."
