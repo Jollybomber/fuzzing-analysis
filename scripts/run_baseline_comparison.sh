@@ -6,11 +6,13 @@ echo "[+] Starting differential testing campaign..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
-RESULTS_DIR="$PROJECT_ROOT/results"
+RESULTS_DIR="${RESULTS_DIR:-$PROJECT_ROOT/results}"
 mkdir -p "$RESULTS_DIR"
 
-CJSON_BIN="$PROJECT_ROOT/builds/cjson_normal/cjson_parse"
-JSONC_BIN="$PROJECT_ROOT/builds/jsonc_normal/jsonc_parse"
+# Override for a new build, e.g. BIN_DIR=bin_v2 ./scripts/run_baseline_comparison.sh
+BIN_DIR="${BIN_DIR:-$PROJECT_ROOT/bin}"
+CJSON_BIN="$BIN_DIR/cjson_parse"
+JSONC_BIN="$BIN_DIR/jsonc_parse"
 
 if [ ! -x "$CJSON_BIN" ] || [ ! -x "$JSONC_BIN" ]; then
     echo "[-] Error: Normal parser binaries not found. Run ./scripts/setup_and_build.sh first."
