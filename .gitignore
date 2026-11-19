@@ -2,3 +2,12 @@ builds/
 results/
 src/
 .idea
+__pycache__/
+
+# Generated build output and fuzzing results (bin/, bin_v2/, build_v2/, fuzz_out_v2/, ...)
+/bin*/
+/build*/
+/fuzz_out*/
+/cjson_fuzz_out/
+/jsonc_fuzz_out/
+fuzz_master*.log
