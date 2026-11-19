@@ -51,9 +51,32 @@ class ComparisonTests(unittest.TestCase):
             self.assertEqual(analyzer.compare(result(left), result(right)), ["VALUE_DIFFERENCE"])
 
     def test_malformed_output_does_not_become_acceptance_disagreement(self):
-        self.assertEqual(analyzer.compare(result(b'"\xff"'), result()), ["INVALID_UTF8_OUTPUT"])
-        self.assertEqual(analyzer.compare(result(b"NaN"), result()), ["INVALID_JSON_OUTPUT"])
-        self.assertEqual(analyzer.compare(result(b"null debug"), result()), ["INVALID_JSON_OUTPUT"])
+        self.assertEqual(analyzer.compare(result(b'"\xff"'), result(b'"\xff"')), ["INVALID_UTF8_OUTPUT"])
+        self.assertEqual(analyzer.compare(result(b'"\xff"'), result(b'"\xfe"')),
+                         ["INVALID_UTF8_OUTPUT", "VALUE_DIFFERENCE"])
+        # Invalid UTF-8 must not hide a value difference elsewhere in the document.
+        self.assertEqual(analyzer.compare(result(b'["\xff",9.2233720368547758e+18]'),
+                                          result(b'["\xff",9223372036854775807]')),
+                         ["INVALID_UTF8_OUTPUT", "VALUE_DIFFERENCE"])
+        self.assertEqual(analyzer.compare(result(b'"\xff"'), result(b'"\xff "')), ["INVALID_UTF8_OUTPUT", "VALUE_DIFFERENCE"])
+        self.assertEqual(analyzer.compare(result(b"NaN"), result(b"NaN")), ["INVALID_JSON_OUTPUT"])
+        self.assertEqual(analyzer.compare(result(b"NaN"), result()), ["INVALID_JSON_OUTPUT", "UNCOMPARABLE_OUTPUT"])
+        self.assertEqual(analyzer.compare(result(b"null debug"), result(b"null debug")), ["INVALID_JSON_OUTPUT"])
+        # Unparseable and different outputs must never count as agreement.
+        self.assertEqual(analyzer.compare(result(b"[1] junk"), result(b"[2] junk")),
+                         ["INVALID_JSON_OUTPUT", "UNCOMPARABLE_OUTPUT"])
+        self.assertEqual(analyzer.compare(result(b"null debug"), result()), ["INVALID_JSON_OUTPUT", "UNCOMPARABLE_OUTPUT"])
+
+    def test_non_rfc_number_output_is_still_compared_by_value(self):
+        # json-c echoes tokens such as `1.`; equal values are not a difference...
+        self.assertEqual(analyzer.compare(result(b"[1]"), result(b"[1.]")), ["INVALID_JSON_OUTPUT"])
+        self.assertEqual(analyzer.compare(result(b"[-0.5]"), result(b"[-.5]")), ["INVALID_JSON_OUTPUT"])
+        # ...but a real difference elsewhere in the document is still found.
+        self.assertEqual(analyzer.compare(result(b'{"a":1,"a":2,"b":3}'), result(b'{"a":2,"b":3.}')),
+                         ["INVALID_JSON_OUTPUT", "VALUE_DIFFERENCE"])
+        # Strings that merely look like numbers are left untouched.
+        self.assertEqual(analyzer.normalize_lenient_numbers('["1.",1.]'), ('["1.",1]', True))
+        self.assertEqual(analyzer.normalize_lenient_numbers('["a\\\\",068e1]'), ('["a\\\\",68e1]', True))
 
     def test_rejection_timeout_and_truncation_are_distinct(self):
         self.assertEqual(analyzer.compare(result(status="rejected"), result()), ["ACCEPTANCE_DIFFERENCE"])
@@ -119,6 +142,27 @@ class ArtifactTests(unittest.TestCase):
         data = analyzer.collect(self.fuzz, self.bin, 1800, 3)
         self.assertTrue(any("IDENTICAL TARGET" in w for w in data["warnings"]))
         self.assertTrue(any("Do not calculate" in w for w in data["warnings"]))
+
+    def test_build_manifest_provenance(self):
+        self.campaign()
+        target = self.bin / "cjson_afl_normal"
+        target.write_bytes(b"target")
+        data = analyzer.collect(self.fuzz, self.bin, 1800, 1)
+        self.assertTrue(any("No run or build manifest" in w for w in data["runs"][0]["warnings"]))
+        digest = analyzer.sha256(b"target")
+        (self.fuzz / "build_manifest.json").write_text(json.dumps({"binaries_sha256": {"cjson_afl_normal": digest}}))
+        row = analyzer.collect(self.fuzz, self.bin, 1800, 1)["runs"][0]
+        self.assertTrue(row["build_manifest_sha_match"])
+        self.assertFalse(any("differs from the build_manifest" in w for w in row["warnings"]))
+        # Without a per-campaign run record the analyzer still warns (older campaigns).
+        self.assertTrue(any("No per-campaign run_manifest.json" in w for w in row["warnings"]))
+        (self.fuzz / "cjson_normal_run1" / "run_manifest.json").write_text(json.dumps({"target_sha256": digest}))
+        row = analyzer.collect(self.fuzz, self.bin, 1800, 1)["runs"][0]
+        self.assertFalse(any("manifest" in w for w in row["warnings"]))
+        target.write_bytes(b"rebuilt target")
+        row = analyzer.collect(self.fuzz, self.bin, 1800, 1)["runs"][0]
+        self.assertFalse(row["build_manifest_sha_match"])
+        self.assertTrue(any("differs from the build_manifest" in w for w in row["warnings"]))
 
     def test_existing_output_and_input_directory_are_protected(self):
         self.campaign()

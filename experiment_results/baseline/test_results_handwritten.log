@@ -1,0 +1,84 @@
+[*] Testing file: /work/tests/handwritten_test_cases/case_sensitive_duplicate.json
+[+] Parsers agree (accepted).
+[*] Testing file: /work/tests/handwritten_test_cases/deep_nesting_arrays.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/deep_nesting_arrays.json:
+    - ACCEPTANCE DISCREPANCY: Parser 1 accepted, Parser 2 rejected
+    [Stderr Parser 2]: Parse error: nesting too deep
+[*] Testing file: /work/tests/handwritten_test_cases/deep_nesting_objects.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/deep_nesting_objects.json:
+    - ACCEPTANCE DISCREPANCY: Parser 1 accepted, Parser 2 rejected
+    [Stderr Parser 2]: Parse error: nesting too deep
+[*] Testing file: /work/tests/handwritten_test_cases/duplicate_auth.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/duplicate_auth.json:
+    - SEMANTIC DISCREPANCY:
+  Parser 1 raw: {"authenticated":false,"authenticated":true}
+  Parser 2 raw: {"authenticated":true}
+[*] Testing file: /work/tests/handwritten_test_cases/duplicate_role.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/duplicate_role.json:
+    - SEMANTIC DISCREPANCY:
+  Parser 1 raw: {"role":"user","role":"admin"}
+  Parser 2 raw: {"role":"admin"}
+[*] Testing file: /work/tests/handwritten_test_cases/empty_array.json
+[+] Parsers agree (accepted).
+[*] Testing file: /work/tests/handwritten_test_cases/empty_structure.json
+[+] Parsers agree (accepted).
+[*] Testing file: /work/tests/handwritten_test_cases/escaped_quotes.json
+[+] Parsers agree (accepted).
+[*] Testing file: /work/tests/handwritten_test_cases/floating_precision.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/floating_precision.json:
+    - SEMANTIC DISCREPANCY:
+  Parser 1 raw: {"value":0.12345678901234568}
+  Parser 2 raw: {"value":0.12345678901234567890123456789}
+[*] Testing file: /work/tests/handwritten_test_cases/int64_overflow.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/int64_overflow.json:
+    - SEMANTIC DISCREPANCY:
+  Parser 1 raw: {"value":9.2233720368547758e+18}
+  Parser 2 raw: {"value":9223372036854775808}
+[*] Testing file: /work/tests/handwritten_test_cases/int64_underflow.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/int64_underflow.json:
+    - SEMANTIC DISCREPANCY:
+  Parser 1 raw: {"value":-9.2233720368547758e+18}
+  Parser 2 raw: {"value":-9223372036854775808}
+[*] Testing file: /work/tests/handwritten_test_cases/invalid_unicode_escape.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/invalid_unicode_escape.json:
+    - ACCEPTANCE DISCREPANCY: Parser 1 accepted, Parser 2 rejected
+    [Stderr Parser 2]: Parse error: invalid string sequence
+[*] Testing file: /work/tests/handwritten_test_cases/leading_zeros.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/leading_zeros.json:
+    - ACCEPTANCE DISCREPANCY: Parser 1 accepted, Parser 2 rejected
+    [Stderr Parser 2]: Parse error: number expected
+[*] Testing file: /work/tests/handwritten_test_cases/missing_colon.json
+[+] Parsers agree (rejected).
+[*] Testing file: /work/tests/handwritten_test_cases/multiple_duplicates.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/multiple_duplicates.json:
+    - SEMANTIC DISCREPANCY:
+  Parser 1 raw: {"id":1,"id":2,"id":3,"role":"guest","role":"admin"}
+  Parser 2 raw: {"id":3,"role":"admin"}
+[*] Testing file: /work/tests/handwritten_test_cases/naked_literal.json
+[+] Parsers agree (accepted).
+[*] Testing file: /work/tests/handwritten_test_cases/nested_duplicate_keys.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/nested_duplicate_keys.json:
+    - SEMANTIC DISCREPANCY:
+  Parser 1 raw: {"user":{"permissions":"read","permissions":"write"}}
+  Parser 2 raw: {"user":{"permissions":"write"}}
+[*] Testing file: /work/tests/handwritten_test_cases/null_byte_string.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/null_byte_string.json:
+    - SEMANTIC DISCREPANCY:
+  Parser 1 raw: {"data":"test"}
+  Parser 2 raw: {"data":"test\u0000string"}
+[*] Testing file: /work/tests/handwritten_test_cases/scientific_notation.json
+[+] Parsers agree (accepted).
+[*] Testing file: /work/tests/handwritten_test_cases/single_quotes.json
+[+] Parsers agree (rejected).
+[*] Testing file: /work/tests/handwritten_test_cases/trailing_comma_array.json
+[+] Parsers agree (rejected).
+[*] Testing file: /work/tests/handwritten_test_cases/trailing_comma_object.json
+[+] Parsers agree (rejected).
+[*] Testing file: /work/tests/handwritten_test_cases/unpaired_surrogate.json
+[!] DISCREPANCY FOUND in /work/tests/handwritten_test_cases/unpaired_surrogate.json:
+    - ACCEPTANCE DISCREPANCY: Parser 1 rejected, Parser 2 accepted
+    [Stderr Parser 1]: Parse error before: \uD800"}
+[*] Testing file: /work/tests/handwritten_test_cases/unquoted_key.json
+[+] Parsers agree (rejected).
+[*] Testing file: /work/tests/handwritten_test_cases/unterminated_string.json
+[+] Parsers agree (rejected).

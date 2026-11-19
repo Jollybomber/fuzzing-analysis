@@ -1,0 +1,48 @@
+{
+  "built_utc": "2026-11-19T04:11:34.336652+00:00",
+  "common_flags": "-O1 -g -fno-omit-frame-pointer",
+  "build_dir": "/work/build_v2",
+  "clang_version": "Ubuntu clang version 20.1.2 (0ubuntu1~24.04.3)\nTarget: aarch64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-20/bin\n",
+  "afl_compiler_version": "Ubuntu clang version 20.1.2 (0ubuntu1~24.04.3)\nTarget: aarch64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-20/bin\n",
+  "sanitizers": {
+    "baseline": [],
+    "normal": [],
+    "asan": [
+      "address"
+    ],
+    "asan_ubsan": [
+      "address",
+      "undefined"
+    ]
+  },
+  "binaries_sha256": {
+    "cjson_afl_asan": "356eab0dfb4abe9663e21712352dcf89645264817e04a354c31ff7c419af338f",
+    "cjson_afl_asan_ubsan": "22dd3a47693add61ee8152a4777e5b93e946d6b044e5387341b77314d6b7db8b",
+    "cjson_afl_normal": "cb975f76246012d93cfbece59fa4724a018694c85c0f8ed54e90d7b7abbb24fa",
+    "cjson_parse": "44a9b1ae1b6c7fae8fd7e1cfd4c03bc7913b59bf9761624e69b0036be90d97e6",
+    "jsonc_afl_asan": "6ef8dce8916f561758ed243853a77798384a7cabe24abea951cc4a874acd864e",
+    "jsonc_afl_asan_ubsan": "f037615bdceccac670e75e7a6b9e89fda171f3d778195bb0e2f1318545a5a5e9",
+    "jsonc_afl_normal": "590a41008cd80e149f06bd415b1ba879c1e25f5ee02c35e3eee475ab8ee04281",
+    "jsonc_parse": "bf234487e915a8bd8518240acd86f5aa0aecdddcab852836924ef55b3dd3cda4"
+  },
+  "source_repositories": {
+    "cjson": {
+      "commit": "c859b25da02955fef659d658b8f324b5cde87be3",
+      "status": "",
+      "tracked_diff": ""
+    },
+    "jsonc": {
+      "commit": "2f2ddc1f2dbca56c874e8f9c31b5b963202d80e7",
+      "status": "",
+      "tracked_diff": ""
+    }
+  },
+  "build_inputs_sha256": {
+    "setup_and_build.sh": "92a5ebc54e7c9a0c09c7ef5940e211a0441597ad8a0c9924e1cc39260015b9ca",
+    "cjson_parse.c": "4a3c7a2352db710ab808de81c930c1cc213f7099334ec0db0520b1c69a8092d4",
+    "jsonc_parse.c": "1fd0d54c63ab18031d242ae5d3caa5a0f1c5f89f53c498d0828f450a8ef148cb",
+    "cJSON.c": "298581a04a36c0165da4b0aade235c23088cb2faa58651d720ea2f3706ed0b0d"
+  },
+  "object_instrumentation_verified": true,
+  "smoke_tests_passed": true
+}

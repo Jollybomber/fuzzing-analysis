@@ -1,0 +1,26 @@
+{
+  "cjson_normal": {
+    "median": 372.93,
+    "slowdown": 1.0
+  },
+  "cjson_asan": {
+    "median": 182.56222222222223,
+    "slowdown": 2.0427555901792993
+  },
+  "cjson_asan_ubsan": {
+    "median": 184.21833333333333,
+    "slowdown": 2.024391347223856
+  },
+  "jsonc_normal": {
+    "median": 433.02666666666664,
+    "slowdown": 1.0
+  },
+  "jsonc_asan": {
+    "median": 188.44444444444446,
+    "slowdown": 2.2979009433962263
+  },
+  "jsonc_asan_ubsan": {
+    "median": 191.15722222222223,
+    "slowdown": 2.2652906420834507
+  }
+}

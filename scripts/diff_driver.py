@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
 import argparse
+import base64
+import importlib.util
 import json
 import os
 import subprocess
 import sys
+from pathlib import Path
+
+# Reuse analyze_fuzzing.py's exact value comparison so baseline and fuzzing results are
+# scored by the same rules: exact decimal numbers (1E2 == 100, long decimals not rounded),
+# object-key order ignored, duplicate keys preserved, non-RFC number spellings compared by value.
+_spec = importlib.util.spec_from_file_location("analyze_fuzzing", Path(__file__).with_name("analyze_fuzzing.py"))
+analyzer = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(analyzer)
+
+# Tags that make a row a disagreement. The others only describe output validity.
+DISCREPANCY_TAGS = {"ABNORMAL_EXECUTION", "ACCEPTANCE_DISCREPANCY", "SEMANTIC_DISCREPANCY", "COMPARISON_LIMIT",
+                    "UNCOMPARABLE_OUTPUT"}
+TAG_NAMES = {"ACCEPTANCE_DIFFERENCE": "ACCEPTANCE_DISCREPANCY", "VALUE_DIFFERENCE": "SEMANTIC_DISCREPANCY"}
 
 SANITIZER_MARKERS = (
     "AddressSanitizer",
@@ -40,6 +55,7 @@ def run_parser(binary_path: str, file_path: str, timeout_sec: float = 5.0):
             "sanitizer_hit": False,
             "stdout": out_str,
             "stderr": err_str,
+            "stdout_b64": base64.b64encode(exc.stdout or b"").decode(),
             "stdout_valid_utf8": out_utf8,
             "stderr_valid_utf8": err_utf8,
         }
@@ -66,39 +82,10 @@ def run_parser(binary_path: str, file_path: str, timeout_sec: float = 5.0):
         "sanitizer_hit": sanitizer_hit,
         "stdout": out_str,
         "stderr": err_str,
+        "stdout_b64": base64.b64encode(result.stdout).decode(),
         "stdout_valid_utf8": out_utf8,
         "stderr_valid_utf8": err_utf8,
     }
-
-
-def canonicalize_json(raw_stdout: str):
-    """
-    Parses JSON while preserving:
-      1. Exact object key order and duplicate keys (via object_pairs_hook)
-      2. Explicit JSON types so `true` != `1` and `int` != `float`
-    """
-    def tag_value(val):
-        if val is None:
-            return ("null", None)
-        if isinstance(val, bool):
-            return ("bool", val)
-        if isinstance(val, int):
-            return ("int", val)
-        if isinstance(val, float):
-            return ("float", val)
-        if isinstance(val, str):
-            return ("str", val)
-        if isinstance(val, list):
-            return ("array", [tag_value(item) for item in val])
-        if isinstance(val, tuple) and len(val) == 2 and val[0] == "__object__":
-            return ("object", [(k, tag_value(v)) for k, v in val[1]])
-        return ("unknown", repr(val))
-
-    parsed = json.loads(
-        raw_stdout,
-        object_pairs_hook=lambda pairs: ("__object__", pairs),
-    )
-    return tag_value(parsed)
 
 
 def differential_test(bin1: str, bin2: str, test_file: str, jsonl_path: str = None) -> bool:
@@ -113,63 +100,34 @@ def differential_test(bin1: str, bin2: str, test_file: str, jsonl_path: str = No
     r1 = run_parser(bin1, test_file)
     r2 = run_parser(bin2, test_file)
 
+    raw_tags = analyzer.compare({**r1, "output_truncated": False}, {**r2, "output_truncated": False})
+    tags = [TAG_NAMES.get(t, t) for t in raw_tags]
     discrepancies = []
-    tags = []
-
-    # 1. Abnormal execution (crashes, timeouts, sanitizer hits, harness errors)
-    abnormal = {"crash", "timeout", "sanitizer", "harness_error"}
-    if r1["status"] in abnormal or r2["status"] in abnormal:
-        tags.append("ABNORMAL_EXECUTION")
-        discrepancies.append(
-            f"EXECUTION STATUS: Parser 1={r1['status']} (code={r1['returncode']}), "
-            f"Parser 2={r2['status']} (code={r2['returncode']})"
-        )
-
-    # 2. Invalid UTF-8 on stdout
-    if not r1["stdout_valid_utf8"] or not r2["stdout_valid_utf8"]:
-        tags.append("INVALID_UTF8_OUTPUT")
-        discrepancies.append(
-            f"UTF-8 OUTPUT ERROR: Parser 1 valid={r1['stdout_valid_utf8']}, "
-            f"Parser 2 valid={r2['stdout_valid_utf8']}"
-        )
-
-    # 3. Acceptance vs. Rejection discrepancy
-    if (r1["status"] in {"accepted", "rejected"}) and (r2["status"] in {"accepted", "rejected"}):
-        if r1["status"] != r2["status"]:
-            tags.append("ACCEPTANCE_DISCREPANCY")
-            discrepancies.append(
-                f"ACCEPTANCE DISCREPANCY: Parser 1 {r1['status']}, Parser 2 {r2['status']}"
-            )
-
-    # 4. Semantic / AST discrepancy when both accepted
-    if r1["status"] == "accepted" and r2["status"] == "accepted":
-        try:
-            canon1 = canonicalize_json(r1["stdout"])
-        except Exception as exc:
-            canon1 = None
-            tags.append("HARNESS_OUTPUT_ERROR")
-            discrepancies.append(f"Parser 1 exited 0 with invalid JSON stdout: {exc}")
-
-        try:
-            canon2 = canonicalize_json(r2["stdout"])
-        except Exception as exc:
-            canon2 = None
-            tags.append("HARNESS_OUTPUT_ERROR")
-            discrepancies.append(f"Parser 2 exited 0 with invalid JSON stdout: {exc}")
-
-        if canon1 is not None and canon2 is not None and canon1 != canon2:
-            tags.append("SEMANTIC_DISCREPANCY")
-            discrepancies.append(
-                f"SEMANTIC DISCREPANCY:\n"
-                f"  Parser 1 raw: {r1['stdout'].strip()}\n"
-                f"  Parser 2 raw: {r2['stdout'].strip()}"
-            )
+    if "ABNORMAL_EXECUTION" in tags:
+        discrepancies.append(f"EXECUTION STATUS: Parser 1={r1['status']} (code={r1['returncode']}), "
+                             f"Parser 2={r2['status']} (code={r2['returncode']})")
+    if "ACCEPTANCE_DISCREPANCY" in tags:
+        discrepancies.append(f"ACCEPTANCE DISCREPANCY: Parser 1 {r1['status']}, Parser 2 {r2['status']}")
+    if "SEMANTIC_DISCREPANCY" in tags:
+        discrepancies.append("SEMANTIC DISCREPANCY:\n"
+                             f"  Parser 1 raw: {r1['stdout'].strip()}\n"
+                             f"  Parser 2 raw: {r2['stdout'].strip()}")
+    if "COMPARISON_LIMIT" in tags:
+        discrepancies.append("COMPARISON LIMIT: outputs could not be compared exactly")
+    if "UNCOMPARABLE_OUTPUT" in tags:
+        discrepancies.append("UNCOMPARABLE OUTPUT: an output is not parseable JSON and the outputs differ")
+    notes = []
+    if "INVALID_UTF8_OUTPUT" in tags:
+        notes.append(f"Output is not valid UTF-8 (parser 1 valid={r1['stdout_valid_utf8']}, "
+                     f"parser 2 valid={r2['stdout_valid_utf8']}); compared by value with the raw bytes preserved")
+    if "INVALID_JSON_OUTPUT" in tags:
+        notes.append("An output is not strict RFC 8259 JSON (e.g. json-c echoing `1.`); compared by value")
 
     if jsonl_path:
         record = {
             "file": test_file,
             "basename": os.path.basename(test_file),
-            "agreed": len(discrepancies) == 0,
+            "agreed": not DISCREPANCY_TAGS.intersection(tags),
             "tags": tags,
             "parser1": r1,
             "parser2": r2,
@@ -187,6 +145,8 @@ def differential_test(bin1: str, bin2: str, test_file: str, jsonl_path: str = No
             print(f"    [Stderr Parser 2]: {r2['stderr'].strip()}")
         return False
 
+    for note in notes:
+        print(f"    [note] {note}")
     print(f"[+] Parsers agree ({r1['status']}).")
     return True
 
@@ -204,4 +164,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception as exc:  # A harness failure must not be mistaken for a parser discrepancy (exit 1).
+        print(f"[-] Harness error: {type(exc).__name__}: {exc}", file=sys.stderr)
+        sys.exit(2)

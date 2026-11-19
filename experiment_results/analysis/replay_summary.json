@@ -1,0 +1,55 @@
+{
+  "inputs_replayed": 10677,
+  "total_distinct_inputs": 10677,
+  "partial": false,
+  "candidate_inputs": 2903,
+  "tag_counts": {
+    "VALUE_DIFFERENCE": 1027,
+    "ACCEPTANCE_DIFFERENCE": 1166,
+    "INVALID_UTF8_OUTPUT": 982,
+    "INVALID_JSON_OUTPUT": 12
+  },
+  "nonrepeatable_candidates": 0,
+  "tag_counts_identical_stdout": {
+    "INVALID_UTF8_OUTPUT": 695
+  },
+  "tag_counts_with_seed_origin": {
+    "VALUE_DIFFERENCE": 7
+  },
+  "representation_only": 29,
+  "status_pairs": {
+    "rejected / rejected": 6508,
+    "accepted / accepted": 3003,
+    "accepted / rejected": 717,
+    "rejected / accepted": 449
+  },
+  "saved_faults_replayed": 8,
+  "saved_faults_reproduced": 0,
+  "settings": {
+    "timeout_seconds": 1.0,
+    "confirmation_repeats": 3,
+    "workers": 4,
+    "output_limit_bytes": 1048576,
+    "sanitizer_options": "abort on error; leak detection off; symbolization on"
+  },
+  "baseline_binaries": [
+    {
+      "path": "/work/bin_v2/cjson_parse",
+      "exists": true,
+      "bytes": 132784,
+      "sha256": "44a9b1ae1b6c7fae8fd7e1cfd4c03bc7913b59bf9761624e69b0036be90d97e6",
+      "xxh3_64": "0x435ed6225e6bc8e1",
+      "asan_runtime_marker": false,
+      "ubsan_runtime_marker": false
+    },
+    {
+      "path": "/work/bin_v2/jsonc_parse",
+      "exists": true,
+      "bytes": 184888,
+      "sha256": "bf234487e915a8bd8518240acd86f5aa0aecdddcab852836924ef55b3dd3cda4",
+      "xxh3_64": "0x1768db53eaff54af",
+      "asan_runtime_marker": false,
+      "ubsan_runtime_marker": false
+    }
+  ]
+}

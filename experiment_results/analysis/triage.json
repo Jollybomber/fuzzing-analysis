@@ -1,0 +1,578 @@
+[
+  {
+    "sha256": "02d68af1a92e4ff236a5fd0d122f9f5b58a0b48f05752f6389d68129cecd1c3a",
+    "origin": {
+      "campaign": "cjson_asan_run4",
+      "instance": "default",
+      "parser": "cjson",
+      "config": "asan",
+      "kind": "hangs",
+      "path": "cjson_asan_run4/default/hangs/id:000000,src:000050,time:152426,execs:33368,op:havoc,rep:11",
+      "time_seconds": 152.426,
+      "is_seed": false
+    },
+    "binary": {
+      "path": "/work/bin_v2/cjson_afl_asan",
+      "exists": true,
+      "bytes": 2358976,
+      "sha256": "356eab0dfb4abe9663e21712352dcf89645264817e04a354c31ff7c419af338f",
+      "xxh3_64": "0x14e8412f70fbee15",
+      "asan_runtime_marker": true,
+      "ubsan_runtime_marker": true
+    },
+    "target_hash_match": true,
+    "timeout_seconds": 1.0,
+    "attempts": [
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.03699529101140797,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiBcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXCEhISEhXFxyXFxcXFxcXFxcXFxcXFxclSJdXFxyXHQiXVx0Il0K",
+        "stdout": "",
+        "stderr": "Parse error before: \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\!!!!!\\\\r\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\x95\"]\\\\r\\t\"]\\t\"]\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008899167005438358,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiBcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXCEhISEhXFxyXFxcXFxcXFxcXFxcXFxclSJdXFxyXHQiXVx0Il0K",
+        "stdout": "",
+        "stderr": "Parse error before: \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\!!!!!\\\\r\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\x95\"]\\\\r\\t\"]\\t\"]\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008121042003040202,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiBcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXCEhISEhXFxyXFxcXFxcXFxcXFxcXFxclSJdXFxyXHQiXVx0Il0K",
+        "stdout": "",
+        "stderr": "Parse error before: \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\!!!!!\\\\r\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\x95\"]\\\\r\\t\"]\\t\"]\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      }
+    ],
+    "reproduced_attempts": 0
+  },
+  {
+    "sha256": "05ae430ac61740e53942adbbd7cd0fdaaf8458a50b167c4359e470b9def28587",
+    "origin": {
+      "campaign": "cjson_asan_run5",
+      "instance": "default",
+      "parser": "cjson",
+      "config": "asan",
+      "kind": "hangs",
+      "path": "cjson_asan_run5/default/hangs/id:000000,src:000296,time:996904,execs:176466,op:havoc,rep:7",
+      "time_seconds": 996.904,
+      "is_seed": false
+    },
+    "binary": {
+      "path": "/work/bin_v2/cjson_afl_asan",
+      "exists": true,
+      "bytes": 2358976,
+      "sha256": "356eab0dfb4abe9663e21712352dcf89645264817e04a354c31ff7c419af338f",
+      "xxh3_64": "0x14e8412f70fbee15",
+      "asan_runtime_marker": true,
+      "ubsan_runtime_marker": true
+    },
+    "target_hash_match": true,
+    "timeout_seconds": 1.0,
+    "attempts": [
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008948124988819472,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiAgXHVjXHUwMCBcdTBGMchcdTB7e3vINyxFXHUwezcsRTVcdTAwNDHIXHUwe3t7XHUwMDQxLEW7XHUwMHt7NyxFNVx1MDD//wo=",
+        "stdout": "",
+        "stderr": "Parse error before:  \\uc\\u00 \\u0F1\\xc8\\u0{{{\\xc87,E\\u0{7,E5\\u0041\\xc8\\u0{{{\\u0041,E\\xbb\\u00{{7,E5\\u00\\xff\\xff\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008189833009964786,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiAgXHVjXHUwMCBcdTBGMchcdTB7e3vINyxFXHUwezcsRTVcdTAwNDHIXHUwe3t7XHUwMDQxLEW7XHUwMHt7NyxFNVx1MDD//wo=",
+        "stdout": "",
+        "stderr": "Parse error before:  \\uc\\u00 \\u0F1\\xc8\\u0{{{\\xc87,E\\u0{7,E5\\u0041\\xc8\\u0{{{\\u0041,E\\xbb\\u00{{7,E5\\u00\\xff\\xff\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008440167002845556,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiAgXHVjXHUwMCBcdTBGMchcdTB7e3vINyxFXHUwezcsRTVcdTAwNDHIXHUwe3t7XHUwMDQxLEW7XHUwMHt7NyxFNVx1MDD//wo=",
+        "stdout": "",
+        "stderr": "Parse error before:  \\uc\\u00 \\u0F1\\xc8\\u0{{{\\xc87,E\\u0{7,E5\\u0041\\xc8\\u0{{{\\u0041,E\\xbb\\u00{{7,E5\\u00\\xff\\xff\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      }
+    ],
+    "reproduced_attempts": 0
+  },
+  {
+    "sha256": "2d9ea7b4a12ddf9713cc27f7e0d0bff743a234d3f7f2e1495fbeb2d2a3ba4b22",
+    "origin": {
+      "campaign": "cjson_normal_run1",
+      "instance": "default",
+      "parser": "cjson",
+      "config": "normal",
+      "kind": "hangs",
+      "path": "cjson_normal_run1/default/hangs/id:000000,src:000408,time:1375912,execs:479113,op:havoc,rep:4",
+      "time_seconds": 1375.912,
+      "is_seed": false
+    },
+    "binary": {
+      "path": "/work/bin_v2/cjson_afl_normal",
+      "exists": true,
+      "bytes": 458640,
+      "sha256": "cb975f76246012d93cfbece59fa4724a018694c85c0f8ed54e90d7b7abbb24fa",
+      "xxh3_64": "0x772933d8a434a24d",
+      "asan_runtime_marker": false,
+      "ubsan_runtime_marker": false
+    },
+    "target_hash_match": true,
+    "timeout_seconds": 1.0,
+    "attempts": [
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.004227416997309774,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiBcCg==",
+        "stdout": "",
+        "stderr": "Parse error before: \\\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.001660416994127445,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiBcCg==",
+        "stdout": "",
+        "stderr": "Parse error before: \\\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.0016065420059021562,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiBcCg==",
+        "stdout": "",
+        "stderr": "Parse error before: \\\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      }
+    ],
+    "reproduced_attempts": 0
+  },
+  {
+    "sha256": "55813c139801d26d53ed0d3d93a30c4548d82c6683652574e42cd43b62563598",
+    "origin": {
+      "campaign": "cjson_asan_run4",
+      "instance": "default",
+      "parser": "cjson",
+      "config": "asan",
+      "kind": "hangs",
+      "path": "cjson_asan_run4/default/hangs/id:000001,src:000163,time:276397,execs:47504,op:havoc,rep:5",
+      "time_seconds": 276.397,
+      "is_seed": false
+    },
+    "binary": {
+      "path": "/work/bin_v2/cjson_afl_asan",
+      "exists": true,
+      "bytes": 2358976,
+      "sha256": "356eab0dfb4abe9663e21712352dcf89645264817e04a354c31ff7c419af338f",
+      "xxh3_64": "0x14e8412f70fbee15",
+      "asan_runtime_marker": true,
+      "ubsan_runtime_marker": true
+    },
+    "target_hash_match": true,
+    "timeout_seconds": 1.0,
+    "attempts": [
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008451582994894125,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiAiOjkyMjY2NjY2NjY2Nm0/eCI6OTIyNjZzNjY2NjY2Njg1NDcoNRcwNjZzNjY2NjY2Njg1NDc3NRcwNwo=",
+        "stdout": "",
+        "stderr": "Parse error before: \":922666666666m?x\":92266s66666668547(5\u0017066s6666666854775\u001707\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008781374999671243,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiAiOjkyMjY2NjY2NjY2Nm0/eCI6OTIyNjZzNjY2NjY2Njg1NDcoNRcwNjZzNjY2NjY2Njg1NDc3NRcwNwo=",
+        "stdout": "",
+        "stderr": "Parse error before: \":922666666666m?x\":92266s66666668547(5\u0017066s6666666854775\u001707\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008027208008570597,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiAiOjkyMjY2NjY2NjY2Nm0/eCI6OTIyNjZzNjY2NjY2Njg1NDcoNRcwNjZzNjY2NjY2Njg1NDc3NRcwNwo=",
+        "stdout": "",
+        "stderr": "Parse error before: \":922666666666m?x\":92266s66666668547(5\u0017066s6666666854775\u001707\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      }
+    ],
+    "reproduced_attempts": 0
+  },
+  {
+    "sha256": "8a299b12f74132eef36aa0ee1005e6ee4c0610572acf986becf7f0905db3d88f",
+    "origin": {
+      "campaign": "cjson_asan_ubsan_run4",
+      "instance": "default",
+      "parser": "cjson",
+      "config": "asan_ubsan",
+      "kind": "hangs",
+      "path": "cjson_asan_ubsan_run4/default/hangs/id:000000,src:000002,time:149774,execs:32780,op:havoc,rep:2",
+      "time_seconds": 149.774,
+      "is_seed": false
+    },
+    "binary": {
+      "path": "/work/bin_v2/cjson_afl_asan_ubsan",
+      "exists": true,
+      "bytes": 2361832,
+      "sha256": "22dd3a47693add61ee8152a4777e5b93e946d6b044e5387341b77314d6b7db8b",
+      "xxh3_64": "0x89a1b0dad7fc288c",
+      "asan_runtime_marker": true,
+      "ubsan_runtime_marker": true
+    },
+    "target_hash_match": true,
+    "timeout_seconds": 1.0,
+    "attempts": [
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008568125005695038,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiB9Cg==",
+        "stdout": "",
+        "stderr": "Parse error before: }\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008913875004509464,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiB9Cg==",
+        "stdout": "",
+        "stderr": "Parse error before: }\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008212625005398877,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiB9Cg==",
+        "stdout": "",
+        "stderr": "Parse error before: }\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      }
+    ],
+    "reproduced_attempts": 0
+  },
+  {
+    "sha256": "a1f54e921653cd42e9f1e10df45cb7b64ac64fd59fe3696f7d35e7426f8b88f5",
+    "origin": {
+      "campaign": "cjson_asan_ubsan_run4",
+      "instance": "default",
+      "parser": "cjson",
+      "config": "asan_ubsan",
+      "kind": "hangs",
+      "path": "cjson_asan_ubsan_run4/default/hangs/id:000001,src:000017,time:273738,execs:46790,op:havoc,rep:1",
+      "time_seconds": 273.738,
+      "is_seed": false
+    },
+    "binary": {
+      "path": "/work/bin_v2/cjson_afl_asan_ubsan",
+      "exists": true,
+      "bytes": 2361832,
+      "sha256": "22dd3a47693add61ee8152a4777e5b93e946d6b044e5387341b77314d6b7db8b",
+      "xxh3_64": "0x89a1b0dad7fc288c",
+      "asan_runtime_marker": true,
+      "ubsan_runtime_marker": true
+    },
+    "target_hash_match": true,
+    "timeout_seconds": 1.0,
+    "attempts": [
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008698000005097128,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiB+dWxsLDJdCg==",
+        "stdout": "",
+        "stderr": "Parse error before: ~ull,2]\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008169250009814277,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiB+dWxsLDJdCg==",
+        "stdout": "",
+        "stderr": "Parse error before: ~ull,2]\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008390791990677826,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiB+dWxsLDJdCg==",
+        "stdout": "",
+        "stderr": "Parse error before: ~ull,2]\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      }
+    ],
+    "reproduced_attempts": 0
+  },
+  {
+    "sha256": "a8beeb3e415e3b29bd5b5ba1910dae6769570822ddbef5e016ae8ea56c4a5e5d",
+    "origin": {
+      "campaign": "cjson_asan_ubsan_run5",
+      "instance": "default",
+      "parser": "cjson",
+      "config": "asan_ubsan",
+      "kind": "hangs",
+      "path": "cjson_asan_ubsan_run5/default/hangs/id:000000,src:000048,time:160917,execs:27784,op:arith8,pos:10,val:-21",
+      "time_seconds": 160.917,
+      "is_seed": false
+    },
+    "binary": {
+      "path": "/work/bin_v2/cjson_afl_asan_ubsan",
+      "exists": true,
+      "bytes": 2361832,
+      "sha256": "22dd3a47693add61ee8152a4777e5b93e946d6b044e5387341b77314d6b7db8b",
+      "xxh3_64": "0x89a1b0dad7fc288c",
+      "asan_runtime_marker": true,
+      "ubsan_runtime_marker": true
+    },
+    "target_hash_match": true,
+    "timeout_seconds": 1.0,
+    "attempts": [
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.008377457997994497,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiBcdUQ4MDFcdU9jMzciXQo=",
+        "stdout": "",
+        "stderr": "Parse error before: \\uD801\\uOc37\"]\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.0081555000069784,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiBcdUQ4MDFcdU9jMzciXQo=",
+        "stdout": "",
+        "stderr": "Parse error before: \\uD801\\uOc37\"]\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.00870224999380298,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiBcdUQ4MDFcdU9jMzciXQo=",
+        "stdout": "",
+        "stderr": "Parse error before: \\uD801\\uOc37\"]\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      }
+    ],
+    "reproduced_attempts": 0
+  },
+  {
+    "sha256": "cc2f787a26a0fe6153f81b90ec2e91e6b4be89dd7675c5e1cbb73bcd10f579a0",
+    "origin": {
+      "campaign": "cjson_normal_run5",
+      "instance": "default",
+      "parser": "cjson",
+      "config": "normal",
+      "kind": "hangs",
+      "path": "cjson_normal_run5/default/hangs/id:000000,src:000231,time:171399,execs:65832,op:havoc,rep:3",
+      "time_seconds": 171.399,
+      "is_seed": false
+    },
+    "binary": {
+      "path": "/work/bin_v2/cjson_afl_normal",
+      "exists": true,
+      "bytes": 458640,
+      "sha256": "cb975f76246012d93cfbece59fa4724a018694c85c0f8ed54e90d7b7abbb24fa",
+      "xxh3_64": "0x772933d8a434a24d",
+      "asan_runtime_marker": false,
+      "ubsan_runtime_marker": false
+    },
+    "target_hash_match": true,
+    "timeout_seconds": 1.0,
+    "attempts": [
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.0016633339982945472,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiA4NTQ3NzU4MDcsIjotOTIyMyI6biI6LTkyMjMzNzIwFjY4NTQ3NzU4LCJ6ZW1pbiI6LTkyMjMzNzIwMzY4NTAzNjg1ODA4MDcsInJvIjowfQo=",
+        "stdout": "",
+        "stderr": "Parse error before: 854775807,\":-9223\":n\":-92233720\u001668547758,\"zemin\":-9223372036850368580807,\"ro\":0}\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.0015764590061735362,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiA4NTQ3NzU4MDcsIjotOTIyMyI6biI6LTkyMjMzNzIwFjY4NTQ3NzU4LCJ6ZW1pbiI6LTkyMjMzNzIwMzY4NTAzNjg1ODA4MDcsInJvIjowfQo=",
+        "stdout": "",
+        "stderr": "Parse error before: 854775807,\":-9223\":n\":-92233720\u001668547758,\"zemin\":-9223372036850368580807,\"ro\":0}\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      },
+      {
+        "status": "rejected",
+        "returncode": 1,
+        "seconds": 0.0015311669994844124,
+        "sanitizer_markers": [],
+        "failure_signature": null,
+        "stdout_b64": "",
+        "stderr_b64": "UGFyc2UgZXJyb3IgYmVmb3JlOiA4NTQ3NzU4MDcsIjotOTIyMyI6biI6LTkyMjMzNzIwFjY4NTQ3NzU4LCJ6ZW1pbiI6LTkyMjMzNzIwMzY4NTAzNjg1ODA4MDcsInJvIjowfQo=",
+        "stdout": "",
+        "stderr": "Parse error before: 854775807,\":-9223\":n\":-92233720\u001668547758,\"zemin\":-9223372036850368580807,\"ro\":0}\n",
+        "output_truncated": false,
+        "stdout_truncated": false,
+        "stderr_truncated": false,
+        "error": null
+      }
+    ],
+    "reproduced_attempts": 0
+  }
+]

@@ -1,0 +1,63 @@
+nohup: ignoring input
+Scheduling 30 campaigns (3 concurrent workers, ~5h+ wall-clock)...
+[2026-11-19 04:14:08] Starting cjson_asan_ubsan_run1 (core=2, duration=1800s)
+[2026-11-19 04:14:08] Starting cjson_asan_run1 (core=1, duration=1800s)
+[2026-11-19 04:14:08] Starting cjson_normal_run1 (core=0, duration=1800s)
+[2026-11-19 04:44:11] Finished cjson_normal_run1
+[2026-11-19 04:44:11] Starting jsonc_normal_run1 (core=0, duration=1800s)
+[2026-11-19 04:44:11] Finished cjson_asan_ubsan_run1
+[2026-11-19 04:44:11] Finished cjson_asan_run1
+[2026-11-19 04:44:11] Starting jsonc_asan_ubsan_run1 (core=2, duration=1800s)
+[2026-11-19 04:44:11] Starting jsonc_asan_run1 (core=1, duration=1800s)
+[2026-11-19 05:14:12] Finished jsonc_normal_run1
+[2026-11-19 05:14:12] Starting cjson_normal_run2 (core=0, duration=1800s)
+[2026-11-19 05:14:14] Finished jsonc_asan_run1
+[2026-11-19 05:14:14] Starting cjson_asan_run2 (core=1, duration=1800s)
+[2026-11-19 05:14:14] Finished jsonc_asan_ubsan_run1
+[2026-11-19 05:14:14] Starting cjson_asan_ubsan_run2 (core=2, duration=1800s)
+[2026-11-19 05:44:13] Finished cjson_normal_run2
+[2026-11-19 05:44:13] Starting jsonc_normal_run2 (core=0, duration=1800s)
+[2026-11-19 05:44:16] Finished cjson_asan_run2
+[2026-11-19 05:44:16] Starting jsonc_asan_run2 (core=1, duration=1800s)
+[2026-11-19 05:44:16] Finished cjson_asan_ubsan_run2
+[2026-11-19 05:44:16] Starting jsonc_asan_ubsan_run2 (core=2, duration=1800s)
+[2026-11-19 06:14:15] Finished jsonc_normal_run2
+[2026-11-19 06:14:15] Starting cjson_normal_run3 (core=0, duration=1800s)
+[2026-11-19 06:14:18] Finished jsonc_asan_run2
+[2026-11-19 06:14:18] Starting cjson_asan_run3 (core=1, duration=1800s)
+[2026-11-19 06:14:19] Finished jsonc_asan_ubsan_run2
+[2026-11-19 06:14:19] Starting cjson_asan_ubsan_run3 (core=2, duration=1800s)
+[2026-11-19 06:44:16] Finished cjson_normal_run3
+[2026-11-19 06:44:16] Starting jsonc_normal_run3 (core=0, duration=1800s)
+[2026-11-19 06:44:20] Finished cjson_asan_run3
+[2026-11-19 06:44:20] Starting jsonc_asan_run3 (core=1, duration=1800s)
+[2026-11-19 06:44:23] Finished cjson_asan_ubsan_run3
+[2026-11-19 06:44:23] Starting jsonc_asan_ubsan_run3 (core=2, duration=1800s)
+[2026-11-19 07:14:17] Finished jsonc_normal_run3
+[2026-11-19 07:14:17] Starting cjson_normal_run4 (core=0, duration=1800s)
+[2026-11-19 07:14:22] Finished jsonc_asan_run3
+[2026-11-19 07:14:23] Starting cjson_asan_run4 (core=1, duration=1800s)
+[2026-11-19 07:14:25] Finished jsonc_asan_ubsan_run3
+[2026-11-19 07:14:25] Starting cjson_asan_ubsan_run4 (core=2, duration=1800s)
+[2026-11-19 07:44:19] Finished cjson_normal_run4
+[2026-11-19 07:44:19] Starting jsonc_normal_run4 (core=0, duration=1800s)
+[2026-11-19 07:44:24] Finished cjson_asan_run4
+[2026-11-19 07:44:24] Starting jsonc_asan_run4 (core=1, duration=1800s)
+[2026-11-19 07:44:27] Finished cjson_asan_ubsan_run4
+[2026-11-19 07:44:27] Starting jsonc_asan_ubsan_run4 (core=2, duration=1800s)
+[2026-11-19 08:14:20] Finished jsonc_normal_run4
+[2026-11-19 08:14:20] Starting cjson_normal_run5 (core=0, duration=1800s)
+[2026-11-19 08:14:27] Finished jsonc_asan_run4
+[2026-11-19 08:14:27] Starting cjson_asan_run5 (core=1, duration=1800s)
+[2026-11-19 08:14:30] Finished jsonc_asan_ubsan_run4
+[2026-11-19 08:14:30] Starting cjson_asan_ubsan_run5 (core=2, duration=1800s)
+[2026-11-19 08:44:21] Finished cjson_normal_run5
+[2026-11-19 08:44:21] Starting jsonc_normal_run5 (core=0, duration=1800s)
+[2026-11-19 08:44:29] Finished cjson_asan_run5
+[2026-11-19 08:44:29] Starting jsonc_asan_run5 (core=1, duration=1800s)
+[2026-11-19 08:44:32] Finished cjson_asan_ubsan_run5
+[2026-11-19 08:44:32] Starting jsonc_asan_ubsan_run5 (core=2, duration=1800s)
+[2026-11-19 09:14:23] Finished jsonc_normal_run5
+[2026-11-19 09:14:31] Finished jsonc_asan_run5
+[2026-11-19 09:14:35] Finished jsonc_asan_ubsan_run5
+All 30 fuzzing runs completed.

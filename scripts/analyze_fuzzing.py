@@ -103,6 +103,14 @@ def read_plot(path, campaign, instance):
     return rows
 
 
+def load_build_manifest(fuzz_root):
+    path = fuzz_root / "build_manifest.json"
+    try:
+        return json.loads(path.read_text()) if path.is_file() else None
+    except (OSError, ValueError):
+        return None
+
+
 def collect(fuzz_root, bin_dir, expected_seconds, expected_repeats):
     runs, timeline, inputs, binary_cache = [], [], {}, {}
     stats_paths = sorted(fuzz_root.rglob("fuzzer_stats"))
@@ -195,10 +203,27 @@ def collect(fuzz_root, bin_dir, expected_seconds, expected_repeats):
             row["warnings"].append("NORMAL LABEL INVALID: current target contains the ASan runtime marker.")
         if config in ("asan", "asan_ubsan") and row["binary"].get("exists") and not row["binary"].get("asan_runtime_marker"):
             row["warnings"].append("ASan-labelled target has no ASan marker; instrumentation needs verification.")
+        # Provenance: run_fuzzing.sh writes a per-campaign run_manifest.json and copies the
+        # build's build_manifest.json (flags, toolchain, source commits, binary hashes) into
+        # the campaign root. Older campaigns may only have the latter.
         manifest = campaign_dir / "run_manifest.json"
         row["run_manifest"] = json.loads(manifest.read_text()) if manifest.is_file() else None
-        if row["run_manifest"] is None:
-            row["warnings"].append("No pre-run manifest: compiler flags, environment and source snapshot not fully recorded.")
+        build_manifest = load_build_manifest(fuzz_root)
+        row["build_manifest_found"] = build_manifest is not None
+        expected_sha = (build_manifest or {}).get("binaries_sha256", {}).get(binary.name)
+        row["build_manifest_sha_match"] = (None if expected_sha is None or not row["binary"].get("sha256")
+                                           else expected_sha == row["binary"]["sha256"])
+        if row["run_manifest"] is None and build_manifest is None:
+            row["warnings"].append("No run or build manifest: compiler flags, environment and source snapshot not recorded.")
+        elif row["run_manifest"] is None:
+            row["warnings"].append("No per-campaign run_manifest.json: the campaign predates run_fuzzing.sh's run records "
+                                   "(and its container-local .cur_input), so core, environment and seed hashes are not "
+                                   "recorded and exec/s may be limited by file I/O.")
+        if row["build_manifest_sha_match"] is False:
+            row["warnings"].append("Current target binary differs from the build_manifest.json used for this campaign.")
+        if row["run_manifest"] and row["binary"].get("sha256") and \
+                row["run_manifest"].get("target_sha256") not in (None, row["binary"]["sha256"]):
+            row["warnings"].append("Current target binary differs from the one recorded when the campaign started.")
         timeline.extend(read_plot(instance / "plot_data", campaign, instance.name))
         runs.append(row)
     warnings = []
@@ -276,10 +301,57 @@ class JSONNumber:
         self.value = (negative, significant, exponent_value - len(fraction) + len(digits) - len(significant))
 
 
-def canonicalize(raw):
+LENIENT_NUMBER = re.compile(r"-?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?")
+STRICT_NUMBER = re.compile(r"-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?")
+
+
+def normalize_lenient_numbers(text):
+    """Rewrite non-RFC number spellings outside strings into equivalent RFC 8259 numbers.
+
+    json-c re-emits a double's original token, so it can print `1.`, `-.5`, `0.e1` or `068e1`.
+    The value is unchanged (`1.` -> `1`, `-.5` -> `-0.5`, `068e1` -> `68e1`), which lets such
+    outputs still be compared by value. Returns (text, changed).
+    """
+    out, i, changed, in_string = [], 0, False, False
+    while i < len(text):
+        ch = text[i]
+        if in_string:
+            out.append(ch)
+            if ch == "\\":
+                out.append(text[i + 1:i + 2])
+                i += 2
+                continue
+            in_string = ch != '"'
+            i += 1
+            continue
+        if ch == '"':
+            in_string = True
+            out.append(ch)
+            i += 1
+            continue
+        match = LENIENT_NUMBER.match(text, i) if (ch.isdigit() or ch in "-.") else None
+        if match:
+            token = match.group()
+            if not STRICT_NUMBER.fullmatch(token):
+                sign = "-" if token.startswith("-") else ""
+                mantissa, _, exponent = token.lstrip("-").replace("E", "e").partition("e")
+                integer, _, fraction = mantissa.partition(".")
+                token = sign + (integer.lstrip("0") or "0") + ("." + fraction if fraction else "") + \
+                    ("e" + exponent if exponent else "")
+                changed = True
+            out.append(token)
+            i = match.end()
+            continue
+        out.append(ch)
+        i += 1
+    return "".join(out), changed
+
+
+def canonicalize(raw, lenient=False):
     """JSON value comparison: exact decimal numbers, unordered object keys,
     ordered arrays and ordered duplicate values per key. Does not erase duplicates.
     This compares serialized values, not the libraries' internal numeric storage.
+    lenient=True first rewrites non-RFC number spellings (see normalize_lenient_numbers).
     """
     def invalid_constant(value):
         raise ValueError("Non-JSON constant: " + value)
@@ -300,7 +372,12 @@ def canonicalize(raw):
             return ("null",)
         return ("string", value)
 
-    return canonical(json.loads(raw.decode("utf-8"), object_pairs_hook=ObjectPairs,
+    # surrogateescape keeps invalid UTF-8 bytes distinguishable (equal bytes compare equal),
+    # so outputs containing raw non-UTF-8 bytes can still be compared by value.
+    text = raw.decode("utf-8", errors="surrogateescape")
+    if lenient:
+        text = normalize_lenient_numbers(text)[0]
+    return canonical(json.loads(text, object_pairs_hook=ObjectPairs,
                                 parse_int=JSONNumber, parse_float=JSONNumber,
                                 parse_constant=invalid_constant))
 
@@ -360,16 +437,32 @@ def compare(left, right):
     if left["status"] == right["status"] == "accepted":
         values = []
         for result in (left, right):
+            raw = base64.b64decode(result["stdout_b64"])
             try:
-                values.append(canonicalize(base64.b64decode(result["stdout_b64"])))
+                raw.decode("utf-8")
             except UnicodeDecodeError:
+                # Reported, but the value comparison below still runs on the raw bytes.
                 tags.append("INVALID_UTF8_OUTPUT")
+            try:
+                values.append(canonicalize(raw))
             except (ComparisonLimit, RecursionError):
                 tags.append("COMPARISON_LIMIT")
             except (ValueError, ArithmeticError):
+                # Not strict JSON (e.g. json-c echoing `1.`): report it, but still compare the
+                # value if the only problem is a non-RFC number spelling.
                 tags.append("INVALID_JSON_OUTPUT")
+                try:
+                    values.append(canonicalize(raw, lenient=True))
+                except (ComparisonLimit, RecursionError):
+                    tags.append("COMPARISON_LIMIT")
+                except (ValueError, ArithmeticError):
+                    pass
         if len(values) == 2 and values[0] != values[1]:
             tags.append("VALUE_DIFFERENCE")
+        elif len(values) < 2 and left["stdout_b64"] != right["stdout_b64"] and "COMPARISON_LIMIT" not in tags:
+            # At least one output could not be parsed even leniently and the outputs differ:
+            # never treat that as agreement.
+            tags.append("UNCOMPARABLE_OUTPUT")
     return sorted(set(tags))
 
 
@@ -578,7 +671,8 @@ def main():
     parser.add_argument("--output", type=Path, help="New/empty output directory; existing results are never overwritten")
     parser.add_argument("--bin-dir", type=Path, default=ROOT / "bin")
     parser.add_argument("--expected-seconds", type=float, default=1800)
-    parser.add_argument("--expected-repeats", type=int, default=3)
+    parser.add_argument("--expected-repeats", type=int, default=5,
+                        help="Runs expected per parser/config (run_fuzzing.sh REPEATS; default 5)")
     parser.add_argument("--replay", action="store_true", help="Execute saved inputs; requires Linux target binaries")
     parser.add_argument("--timeout", type=float, default=1.0, help="Replay timeout per process in seconds")
     parser.add_argument("--confirm", type=int, default=3, help="Attempts per candidate and saved fault")

@@ -11,3 +11,7 @@ __pycache__/
 /cjson_fuzz_out/
 /jsonc_fuzz_out/
 fuzz_master*.log
+
+# Committed experiment results (overrides the log and results rules above)
+!/experiment_results/
+!/experiment_results/**
